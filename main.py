@@ -1,32 +1,19 @@
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 import nltk
+from data import training_data
+nltk.download('punkt_tab', quiet=True)
 
-nltk.download('punkt_tab')
+Hamza_assistant = ChatBot("Hamza_chatbot", logic_adapters=[
+    {
+    "import_path":"chatterbot.logic.BestMatch",
+    "default_response":"Sorry I'm unable to respond yet",
+    "maximum_similarity_threshold": 0.95
+    }
+                     ])
 
-my_chatbot = ChatBot("Chatbot", logic_adapters=["chatterbot.logic.BestMatch"])
+ListTrainer(Hamza_assistant).train(training_data)
 
-def bot_training(bot:ChatBot,training_data:list):
-    ListTrainer(bot).train(training_data)
-
-def get_response(bot:ChatBot):
+while True:
     user_input = input("User: ")
-    return bot.get_response(user_input)
-
-training_list = [
-                "hi",
-                "hi there",
-                "what's your name",
-                "I'm a chatbot",
-                "how old are you ?",
-                "I'm ageless!"
-
-]
-
-list_trainer = ListTrainer(bot)
-
-list_trainer.train(training_list)
-
-user_response = input("User: ")
-
-print(bot.get_response(user_response))
+    print("Chatbot: "+str(Hamza_assistant.get_response(user_input)))
